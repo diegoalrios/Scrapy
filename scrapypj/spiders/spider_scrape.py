@@ -1,5 +1,6 @@
 import scrapy
 
+
 class Spider_Scrape(scrapy.Spider):
 
     ##vars
@@ -7,16 +8,32 @@ class Spider_Scrape(scrapy.Spider):
     start_urls = [
         'http://quotes.toscrape.com/'
     ]
+    '''
+    ##de esta forma demos formato al comando scrapy crowl scrape
+    custom_settings = {
+        'FEED_URI' : 'autores.csv',
+        'FEED_FORMAT' : 'csv',
+    }   
+    
+    '''
+
 
     ##methods
 
     def parse(self, response):
         ## console: scrapy crawl scrape -o top.csv [.json etc]
-        topten = response.xpath('//div[contains(@class, "tags-box")]//span[@class="tag-item"]/a/text()').getall()
+        autores = response.xpath('//div[@class="quote"]//span/small[@class="author"]/text()').getall()
+
         ##retornamosn un dicct
         yield {
-            'top_ten' : topten,
+            'autores' : autores,
         }
+        next_page = response.xpath('//ul[@class="pager"]//li[@class="next"]/a/@href').get()
+        if next_page:
+            yield response.follow(next_page, callback=self.parse)
+
+
+
 
 
     ''' 
