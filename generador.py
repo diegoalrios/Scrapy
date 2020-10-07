@@ -1,0 +1,1 @@
+def pares():    for i in range(2, 201, 2):            yield ix=pares()for i in range(100):    print(next(x))
