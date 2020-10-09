@@ -13,24 +13,40 @@ class Spider_Scrape(scrapy.Spider):
     custom_settings = {
         'FEED_URI' : 'autores.csv',
         'FEED_FORMAT' : 'csv',
+        'CONCURRENT_REQUESTS':24
+        'FEED_EXPORT_ENCODING:'utf-8''
     }   
     
     '''
 
 
     ##methods
+    def parse_autores(self, response, **kwargs):## **desempaquetar dict
+
+        if kwargs:
+            autores=kwargs['autores']
+
+        autores.extend(response.xpath('//div[@class="quote"]//span/small[@class="author"]/text()').getall())
+        next_page = response.xpath('//ul[@class="pager"]//li[@class="next"]/a/@href').get()
+        if next_page:
+            yield response.follow(next_page, callback=self.parse_autores, cb_kwargs={'autores': autores})
+        else:
+            yield {
+                'autores': autores
+            }
 
     def parse(self, response):
         ## console: scrapy crawl scrape -o top.csv [.json etc]
         autores = response.xpath('//div[@class="quote"]//span/small[@class="author"]/text()').getall()
+        top = response.xpath('//div[contains(@class, "tags-box")]//span[@class="tag-item"]/a/text()').getall()
 
         ##retornamosn un dicct
         yield {
-            'autores' : autores,
+            'top': top,
         }
         next_page = response.xpath('//ul[@class="pager"]//li[@class="next"]/a/@href').get()
         if next_page:
-            yield response.follow(next_page, callback=self.parse)
+            yield response.follow(next_page, callback=self.parse_autores, cb_kwargs={'autores': autores})
 
 
 

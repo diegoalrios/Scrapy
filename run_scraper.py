@@ -12,7 +12,8 @@ def leer(file):
 
 def escribir(msn,file):
 
-    message=msn.replace('\"','')
+    ##message=msn.replace('\"','')
+    message=msn
     print(message)
 
     f = open(file, 'w')
@@ -21,7 +22,8 @@ def escribir(msn,file):
 
 
 def run():
-    file = 'autores.csv'
+    file = 'autores.json'
+    ##
     os.system(f'scrapy crawl scrape -o {file}')
     msn=leer(file)
     escribir(msn,file)
