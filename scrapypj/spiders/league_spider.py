@@ -1,5 +1,9 @@
 import scrapy
-##ruta:
+## Nota :
+'''
+este scrpaper retorna todos los links de los jugaroeres 
+pero para consequirlo es nesesario violar a robots.txt
+'''
 
 class League_Spider(scrapy.Spider):
     ##vars
