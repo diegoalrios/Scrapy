@@ -1,3 +1,4 @@
+*.json
 .idea/
 scrapypj/__pycache__/
 scrapypj/spiders/__pycache__/
