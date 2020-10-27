@@ -1,8 +1,5 @@
 import os
 
-
-
-
 def leer(file):
     f = open(file, 'r')
     mensaje = f.read()
